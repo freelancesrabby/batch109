@@ -19,11 +19,18 @@ class ProductController extends Controller
    }
    public function store(Request $request)
    {
-    $inputs = [
-        'name'=>$request->input('name'),
-        'price'=>$request->input('price'),
-        'desc'=>$request->input('desc'),
-    ];
+     //  dd($request->all());
+
+    $photo = $request->file('photo');
+    $newName = 'product_'.time().'.'.$photo->getClientOriginalExtension();
+    $photo->move('uploads/products',$newName);
+       $inputs = [
+           'name'=>$request->input('name'),
+           'price'=>$request->input('price'),
+           'desc'=>$request->input('desc'),
+           'photo'=>$newName
+       ];
+
         Product::create($inputs);
         return redirect()->route('admin.product');
    }
